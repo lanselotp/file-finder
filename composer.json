@@ -1,0 +1,24 @@
+{
+		"name": "bgotest/filefinder",
+		"description": "File finder by content and additional search features",
+		"type": "library",
+		"authors": [
+				{
+						"name": "Petur",
+						"email": "peturhristozovps@gmail.com"
+				}
+		],
+		"require": {},
+		"autoload": {
+				"psr-4": {
+						"FileFinder\\": "src/"
+				}
+		},
+		"extra": {
+				"laravel": {
+						"providers": [
+								"FileFinder\\ServiceProviders\\FileFinderServiceProvider"
+						]
+				}
+		}
+}
