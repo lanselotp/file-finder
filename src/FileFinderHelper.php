@@ -12,31 +12,10 @@ class FileFinderHelper {
 	const SUCCESS_STATUS = 200;
 
 	public static $API_ERRORS = [
-		1000 => 'Invalid search key!',
-		1001 => 'Invalid sensitive format!',
+		1000 => 'Invalid search string!',
+		1001 => 'Invalid case sensitive format!',
 		1002 => 'Directory does not exist on this project!',
 	];
-
-	/**
-	 * localAppStoragePath variable
-	 *
-	 * @var string
-	 */
-	public $storagePath = "";
-
-	/**
-	 * publicStoragePath variable
-	 *
-	 * @var string
-	 */
-	public $publicStoragePath = "";
-
-	/**
-	 * fileFinderStoragePath variable
-	 *
-	 * @var string
-	 */
-	public $privateStoragePath = "";
 
 	/**
 	 * fileFilterAllowed variable
@@ -67,28 +46,27 @@ class FileFinderHelper {
 	public $ignoredFolders = ['vendor', 'node_modules', 'bower_components'];
 
 	/**
-	 * __construct function
+	 * searchedFilesCount variable
+	 *
+	 * @var array
 	 */
-	public function __construct() {
-			$this->storagePath = storage_path('app' . DIRECTORY_SEPARATOR);
-			$this->publicStoragePath = $this->storagePath . 'public' . DIRECTORY_SEPARATOR;
-			$this->privateStoragePath = $this->storagePath . 'private' . DIRECTORY_SEPARATOR;
-	}
+	public $searchedFilesCount = 0;
 
 	/**
-	* Search all files content in storage/app folder available for public use from user
+	* Search files content
 	*
-	* @var $isJson boolean
-	* @var $searchKey string
+	* @var $searchString string
 	* @var $directory string
 	* @var $sensitive string
+	* @var $isJSON boolean
 	* @return array
 	**/
-	public function searchByContent($isJson = true, $searchKey, $directory, $sensitive = 'off') {
+	public function searchByContent($searchString, $directory, $sensitive, $isJSON = true) {
 		$foundFiles = [];
-		$directory = $directory !== '' ? base_path() . DIRECTORY_SEPARATOR . $directory : base_path();
+		$basePath = base_path();
+		$directory = $directory !== '' ? $basePath . DIRECTORY_SEPARATOR . $directory : $basePath;
 
-		if(is_null($searchKey)) {
+		if(is_null($searchString)) {
 			return $this->apiErrors(1000);
 		}
 
@@ -106,7 +84,7 @@ class FileFinderHelper {
 
 		foreach($files as $file) {
 			if(File::isFile($file)) {
-				$foundFiles = $this->checkFile($file, $foundFiles, $searchKey, $sensitive);
+				$foundFiles = $this->checkFile($file, $foundFiles, $searchString, $sensitive);
 
 				continue;
 			}
@@ -118,35 +96,36 @@ class FileFinderHelper {
 			}
 
 			$folderFiles = File::allFiles($file);
-			$foundFiles = $this->findFiles($searchKey, $sensitive, $folderFiles, $foundFiles);
+			$foundFiles = $this->findFiles($searchString, $sensitive, $folderFiles, $foundFiles);
 		}
 
-		$response = [
-			'searchedString' => $searchKey,
-			'searchedFiles' => count($files),
-			'foundFiles' => count($foundFiles),
+		$data = [
+			'searchedString' => $searchString,
+			'searchedFilesCount' => $this->searchedFilesCount,
+			'foundFilesCount' => count($foundFiles),
 			'files' => $foundFiles
 		];
 
-		return $isJson ? $this->jsonResponse($response, true) : $response;
+		return $isJSON ? $this->jsonResponse($data, true) : $data;
 	}
 
-	private function findFiles($searchKey, $sensitive, $files, $foundFiles) {
+	private function findFiles($searchString, $sensitive, $files, $foundFiles) {
 		foreach($files as $file) {
-			$foundFiles = $this->checkFile($file, $foundFiles, $searchKey, $sensitive);
+			$foundFiles = $this->checkFile($file, $foundFiles, $searchString, $sensitive);
 		}
 
 		return $foundFiles;
 	}
 
-	private function checkFile($file, $foundFiles, $searchKey, $sensitive) {
+	private function checkFile($file, $foundFiles, $searchString, $sensitive) {
 		if(!in_array($file->getExtension(), $this->fileExtensionAllowed)) {
 			return $foundFiles;
 		}
 
+		$this->searchedFilesCount++;
 		$content = $this->formatString($sensitive, $file->getContents());
-		$formatString = $this->formatString($sensitive, $searchKey);
-		$position = $searchKey === '' ? 0 : strpos($content, $formatString);
+		$formatString = $this->formatString($sensitive, $searchString);
+		$position = $searchString === '' ? 0 : strpos($content, $formatString);
 
 		if($position !== false) {
 			$foundFiles[] = $this->prepareFile($file, $position);
@@ -206,7 +185,7 @@ class FileFinderHelper {
 	public function getProjectDirectories() {
 		$baseRootDirectories = File::directories(base_path());
 		$directories = [
-			'' => 'Root Project'
+			'' => 'All directories'
 		];
 
 		foreach($baseRootDirectories as $directoryPath) {

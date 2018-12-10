@@ -35,7 +35,7 @@
 				<span>Route:  file-finder/api/searchByContent</span>
 				<p class="q-params">Query params</p>
 				<ul>
-					<li>- searchKey -> searched string in content file</li>
+					<li>- searchString -> searched string in content file</li>
 					<li>- directory -> traversed directory</li>
 					<li>- sensitive -> search by case sensitive</li>
 				</ul>
@@ -59,8 +59,8 @@
 						{
 							<div class="l2">
 								<span>"searchedString"</span>: "test",<br>
-								<span>"searchedFiles"</span>: 19,<br>
-								<span>"foundFiles"</span>: 2,<br>
+								<span>"searchedFilesCount"</span>: 19,<br>
+								<span>"foundFilesCount"</span>: 2,<br>
 								<span>"files"</span>: [
 									<div class="l3">
 										{
@@ -114,15 +114,18 @@
 							<div class="input-group col-md-12">
 								<input required type="text" class="form-control input-lg" placeholder="search file..." />
 								<span class="input-group-btn">
-							<button class="btn btn-info btn-lg" type="submit">
-								<i class="glyphicon glyphicon-search"></i>
-							</button>
-						</span>
+									<button class="btn btn-info btn-lg" type="submit">
+										<i class="glyphicon glyphicon-search"></i>
+									</button>
+								</span>
 							</div>
 						</form>
 					</div>
+					<button class="btn btn-info btn-lg reset-files-search" type="button">
+						Reset
+					</button>
 					<div class="search-data">
-						<span>Found <b class="found">{{$data['foundFiles']}}</b> from <b class="from">{{$data['searchedFiles']}}</b></span>
+						<span>Found <b class="found">{{$data['foundFilesCount']}}</b> from <b class="from">{{$data['searchedFilesCount']}}</b></span>
 					</div>
 				</div>
 			</div>

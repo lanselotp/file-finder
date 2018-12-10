@@ -9,21 +9,21 @@ use FileFinder\FileFinderHelper;
 class FileFinderController extends Controller {
 	public function index() {
 		$fileFinder = new FileFinderHelper();
-		$string = '';
+		$searchString = '';
 		$sensitive = 'off';
 		$directory = '';
-		$data = $fileFinder->searchByContent(false, $string, $directory, $sensitive);
+		$data = $fileFinder->searchByContent($searchString, $directory, $sensitive, false);
 		$directories = $fileFinder->getProjectDirectories();
 
 		return view('fileFinder::index', compact('data', 'directories'));
 	}
 
-	public function searchByContent() {
+	public function getFilesByContent() {
 		$fileFinder = new FileFinderHelper();
-		$string = Input::get('searchKey', null);
-		$directory = Input::get('directory', base_path());
-		$sensitive = Input::get('sensitive', 'off');
+		$searchString = Input::get('searchString', null);
+		$directory = Input::get('directory', '');
+		$sensitive = Input::get('sensitive', '');
 
-		return $fileFinder->searchByContent(true, $string, $directory, $sensitive);
+		return $fileFinder->searchByContent($searchString, $directory, $sensitive, true);
 	}
 }

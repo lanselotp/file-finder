@@ -15,18 +15,20 @@ class FileFinderTest extends TestCase {
 	public function testSearchByContentData() {
 		$fileFinder = new FileFinderHelper();
 		$string = 'Test content for unit tests';
+		$directory = 'public';
+		$sensitive = 'off';
 
-		$data = $fileFinder->searchByContent(false, $string);
+		$data = $fileFinder->searchByContent($string, $directory, $sensitive, false);
 		$isTrue = true;
 
-		if(!is_array($data)) {
+			if(!is_array($data)) {
 			$isTrue = false;
 		}
 		else {
-			if(!isset($data['searchedFiles']) || !is_int($data['searchedFiles'])) {
+			if(!isset($data['searchedFilesCount']) || !is_int($data['searchedFilesCount'])) {
 				$isTrue = false;
 			}
-			if(!isset($data['foundFiles']) || !is_int($data['foundFiles'])) {
+			if(!isset($data['foundFilesCount']) || !is_int($data['foundFilesCount'])) {
 				$isTrue = false;
 			}
 			if(!isset($data['searchedString']) || !is_string($data['searchedString'])) {
@@ -46,15 +48,20 @@ class FileFinderTest extends TestCase {
 	 * @return void
 	 */
 	public function testErrorsApiInvalidParams() {
-		$string = null;
-		$responseSearchedKey = $this->get('/api/searchByContent?searchKey=');
-		$responseSensitive = $this->get('/api/searchByContent?searchKey=test&sensitive=not_valid');
+		$apiRoute = '/file-finder/api/searchByContent';
+
+		$responseSearchedKey = $this->get($apiRoute);
+		$responseSensitive = $this->get($apiRoute . '?searchString=test&sensitive=not_valid');
+		$responseDirectory = $this->get($apiRoute . '?searchString=test&directory=not_valid&sensitive=off');
 
 		$responseSearchedKey->assertExactJson([
 			'error' => FileFinderHelper::$API_ERRORS[1000],
 		]);
 		$responseSensitive->assertExactJson([
 			'error' => FileFinderHelper::$API_ERRORS[1001],
+		]);
+		$responseDirectory->assertExactJson([
+			'error' => FileFinderHelper::$API_ERRORS[1002],
 		]);
 	}
 }

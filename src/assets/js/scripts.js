@@ -20,19 +20,28 @@ function closeNav() {
 
 $(function() {
 	$('#file-finder-form').on('submit', onSearchFiles);
+	$('.reset-files-search').on('click', onResetSearchFiles);
+
+	function onResetSearchFiles() {
+		location.reload();
+	}
 
 	function onSearchFiles(event) {
 		event.preventDefault();
 
-		var searchKey = $(this).find('input').val();
+		var searchString = $(this).find('input').val();
 		var sensitive = $('.sensitive select').find('option:selected').attr('value');
 		var directory = $('.directories select').find('option:selected').attr('value');
 
+		doSearchFiles(searchString, sensitive, directory);
+	}
+
+	function doSearchFiles(searchString, sensitive, directory) {
 		$.ajax({
 			url: 'file-finder/api/searchByContent',
 			type: 'GET',
 			data: {
-				searchKey: searchKey,
+				searchString: searchString,
 				directory: directory,
 				sensitive: sensitive
 			},
@@ -45,7 +54,7 @@ $(function() {
 	}
 
 	function onError(data) {
-		alert(data);
+		alert(data.responseJSON.error);
 	}
 
 	function getFileTemplate(file) {
@@ -59,14 +68,14 @@ $(function() {
 
 	function successFiles(data) {
 		var files = data.files;
-		var foundFiles = data.foundFiles;
+		var foundFilesCount = data.foundFilesCount;
 		var element = $('.files');
 
 
-		$('.found').text(foundFiles);
-		$('.from').text(data.searchedFiles);
+		$('.found').text(foundFilesCount);
+		$('.from').text(data.searchedFilesCount);
 
-		if(foundFiles === 0) {
+		if(foundFilesCount === 0) {
 			element.html('<h3>No files content matched your search criteria !</h3>');
 
 			return;
@@ -74,7 +83,7 @@ $(function() {
 
 		element.html('');
 
-		for(var i = 0; i < data.foundFiles; i++) {
+		for(var i = 0; i < foundFilesCount; i++) {
 			element.append(getFileTemplate(files[i]))
 		}
 	}
