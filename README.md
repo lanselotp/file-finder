@@ -5,7 +5,7 @@ File finder is simple search package for finding .txt files by content in all di
 
 # Installation
 
-- Publish Assets and Default Data Samples
+- Publish Assets and Default files content
 
 ```
 $ php artisan vendor:publish --tag=public --force
