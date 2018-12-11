@@ -14,7 +14,7 @@ $ php artisan vendor:publish --tag=files --force
 ```
 
 - FineFinderService provider is loaded automatically by laravel autodiscovery if version >= 5.5
-- Testing demo after installation : http://domain.example/file-finder-demo
+- Testing demo after installation : http://example.com/file-finder-demo
 
 ![image](https://user-images.githubusercontent.com/19529749/49754622-43b9c000-fcbf-11e8-833b-41d212fb9c50.png)
 
@@ -53,3 +53,4 @@ $ php artisan vendor:publish --tag=files --force
   ]
 }
 ```
+- Ignored folders for searching files - **vendor, node_modules, bower_components**
