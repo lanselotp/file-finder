@@ -12,10 +12,6 @@ class FileFinderServiceProvider extends ServiceProvider {
 		$this->publishes([
 			__DIR__ . '/../assets' => public_path('file_finder')
 		], 'public');
-
-		$this->publishes([
-			__DIR__ . '/../TextFiles' => public_path('file_finder')
-		], 'files');
 	}
 
 	public function register() {
