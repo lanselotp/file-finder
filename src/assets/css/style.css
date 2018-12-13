@@ -34,8 +34,8 @@
 	color: #0f1010;
 	background: #f9f9f9;
 }
-.sensitive span, .directories span {
-	margin-right: 10px;
+.input-group-addon, .input-group-btn {
+	width: 51px;
 }
 .flex-container {
 	display: flex;

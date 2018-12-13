@@ -10,3 +10,9 @@ function getFileTemplate(file) {
 function getNoResultTemplate() {
 	return '<h3>No files content matched your search criteria !</h3>';
 }
+
+function getLoadingTemplate() {
+	return '<div class="holder-loading">' +
+	'<div class="loading"></div>' +
+	'</div>';
+}

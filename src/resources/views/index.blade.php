@@ -19,19 +19,19 @@
 <body>
 	<div id="demo-finder">
 		<div id="documentation-panel" class="sidenav">
-			<a href="javascript:void(0)" class="closebtn" id="hide-documentation">&times;</a>
+			<a href="javascript:void(0)" class="closebtn" dusk="file-finder-documentation-hide" id="hide-documentation">&times;</a>
 			<div id="content-sidenav">
 				<h2 class="padding-border">Available Features</h2>
 				<ul class="content-bg">
 					<li>- Search files by Content</li>
 				</ul>
-				
+
 				<h3 class="padding-border">API SETTINGS</h3>
 				<ul class="content-bg">
 					<li>- Set case sensitive for string search</li>
 					<li>- Choose directory searching</li>
 				</ul>
-				
+
 				<h3 class="padding-border">REST API</h3>
 				<div class="content-bg">
 					<span>Route:  file-finder/api/searchByContent</span>
@@ -84,22 +84,22 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Use any element to open the sidenav -->
-		<button class="btn btn-info btn-lg" id="show-documentation">Documentation</button>
-		
+		<button class="btn btn-info btn-lg" dusk="file-finder-documentation-show" id="show-documentation">Documentation</button>
+
 		<!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
 		<div id="main">
 			<div class="container">
 				<div class="row holder-settings">
-					<div class="sensitive">
+					<div dusk="sensitive-select" class="sensitive">
 						<span>Select case sensitive</span>
 						<select>
 							<option value="off">off</option>
 							<option value="on">on</option>
 						</select>
 					</div>
-					<div class="directories">
+					<div dusk="directories-select" class="directories">
 						<span>Select directory</span>
 						<select>
 							@foreach($directories as $path => $directory)
@@ -114,9 +114,9 @@
 							<h2>Test File Finder API</h2>
 							<form action="#" method="GET" id="file-finder-form">
 								<div class="input-group col-md-12">
-									<input required type="text" class="form-control input-lg" placeholder="search file..." />
+									<input dusk="file-finder-input" required type="text" class="form-control input-lg" placeholder="search file..." />
 									<span class="input-group-btn">
-									<button class="btn btn-info btn-lg" type="submit">
+									<button dusk="file-finder-search-button" class="btn btn-info btn-lg" type="submit">
 										<i class="glyphicon glyphicon-search"></i>
 									</button>
 								</span>
@@ -131,7 +131,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="row files">
 					@foreach($data['files'] as $file)
 						<div class="panel panel-default">
