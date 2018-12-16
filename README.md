@@ -9,7 +9,6 @@ File finder is simple search package for finding .txt files by content in all di
 
 ```
 $ php artisan vendor:publish --tag=public --force
-$ php artisan vendor:publish --tag=files --force
 
 ```
 
